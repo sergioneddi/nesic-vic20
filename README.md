@@ -1,4 +1,4 @@
-# NESIC (NEsic Is Not baSIC)
+# NESIC (NEsic is not baSIC)
 
 > [**🇮🇹 Leggi la documentazione in Italiano**](README.it.md)
 
