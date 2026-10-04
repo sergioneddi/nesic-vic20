@@ -1,6 +1,6 @@
 # NESIC (NEsic is not baSIC)
 
-> **[🇬🇧 Read the documentation in English**](README.md)
+> [**🇬🇧 Read the documentation in English**](README.md)
 
 **NESIC** (*NEsic is not baSIC*) è un linguaggio di programmazione strutturato progettato per il **Commodore VIC-20**.
 
