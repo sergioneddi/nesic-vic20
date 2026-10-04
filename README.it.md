@@ -38,7 +38,7 @@ NESIC è stato originariamente sviluppato nel 1984 su un **Commodore VIC-20 dota
 
 2. Clonare questa repository o scaricare i file sorgente.
 
-3. Aprire nesic2.4.asm in CBM prg Studio.
+3. Aprire nesic.asm in CBM prg Studio.
 
 4. Premere **Build** (F2) per generare il file eseguibile (.prg).
 
