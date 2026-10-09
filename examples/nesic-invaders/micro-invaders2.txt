@@ -1,0 +1,152 @@
+100 bgn[micro invaders 2]
+110 [inizializza]
+120 [game over]:[gioco]:repeat
+130 bgn[gioco]
+140 [proiettile]
+150 [mov cann]
+160 [proiettile]
+170 [mov alieno]
+180 [proiettile]
+190 [mov cann]
+200 [proiettile]
+210 [mov cann]
+220 [2mov alieno]
+230 again
+240 bgn[mov cann]
+250 d=0
+260 on joy[sx];[dx]
+270 x=x+d
+280 csr x,20:print cn$;
+290 end
+300 bgn[proiettile]
+310 csr x2,1:print " "
+320 if fire and (y2=1) x2=x:y2=20:effect 3,1,127,0
+330 if y2>1 y2=y2-1:csr x2,y2:if video=32 print tp$;:else[punti]:[esplosione]
+340 end
+350 bgn[sx]:if x>0 d=-1
+360 end
+370 bgn[dx]:if x<20 d=1
+380 end
+390 bgn[mov alieno]
+400 dx=0
+410 if rnd(1)<.5 [sx alieno]:else[dx alieno]
+420 dy=0
+430 if rnd(1)<.4 [su]:else[giu]
+440 csr x1,y1
+450 print"  ";
+460 x1=x1+dx
+470 y1=y1+dy
+480 csr x1,y1
+490 print chr$(30);al$;
+500 if y1>19 [fine]:end[gioco]
+510 end
+520 bgn[sx alieno]
+530 if x1>0 dx=-1
+540 end
+550 bgn[dx alieno]
+560 if x1<20 dx=1
+570 end
+580 bgn[su]
+590 if y1>3 dy=-1
+600 end
+610 bgn[giu]
+620 dy=1
+630 end
+640 bgn[punti]
+650 sc=sc+y1*y1
+660 ink=7
+670 csr 6,0
+680 print sc
+690 end
+700 bgn[esplosione]
+710 effect 3,0
+720 effect 1,3,127,120
+730 csr x2,y2
+740 co=color
+750 print cp$;
+760 for t=1 to 200:next
+770 if co=3 [2colpito]:else[colpito]
+780 print"  ";
+790 effect 1,128,100,90
+800 end
+810 bgn[fine]
+820 effect:effect 2,1,40,120
+830 ink=5
+840 csr 0,11
+850 print "mi dispiace, sei stato"
+860 csr 7,13
+870 print "invaso!"
+880 for i=1 to 3000:next
+890 end
+900 bgn[game over]
+910 effect
+920 effect 1,1,100,0
+930 csr
+940 ink=2:print "punti:";:ink=7:print sc
+950 csr 6,11
+960 print chr$(158);"game over"
+970 csr 4,5:print chr$(5);"micro invaders"
+980 csr 3,19:print chr$(30);"premi 'fire' per";
+990 csr 8,21:print "iniziare"
+1000 if not fire repeat
+1010 if fire repeat
+1020 sc=0
+1030 y1=3
+1040 x1=int(rnd(1)*21)
+1050 csr
+1060 ink=2:print "punti:";:ink=7:print sc
+1070 y4=3
+1080 x4=int(rnd(1)*21)
+1090 x=10
+1100 y2=1
+1110 effect 1,128,100,90
+1120 end
+1130 bgn[inizializza]
+1140 border=0
+1150 paper=0
+1160 graphic 1
+1170 poke shape(85),$00,01,02,1f,7f,ed,7f,3f
+1180 ,00,80,40,f8,fe,bb,fe,fc
+1190 ,01,01,03,1f,37,3f,1f,15
+1200 ,00,00,80,f0,d8,f8,f0,50
+1210 tp$=chr$(5)+chr$(167)+chr$(157)+chr$(17)+chr$(32)
+1220 cn$=chr$(158)+chr$(157)+chr$(32)+chr$(215)+chr$(216)+chr$(32)
+1230 al$=chr$(213)+chr$(214)
+1240 cp$=chr$(28)+chr$(42)+chr$(157)+chr$(17)+chr$(32)+chr$(145)+chr$(157)
+1250 end
+1260 bgn[2mov alieno]
+1270 dx=0
+1280 if rnd(1)<.5 [2sx alieno]:else[2dx alieno]
+1290 dy=0
+1300 if rnd(1)<.4 [2su]:else[giu]
+1310 csr x4,y4
+1320 print"  ";
+1330 x4=x4+dx
+1340 y4=y4+dy
+1350 csr x4,y4
+1360 print chr$(159);al$;
+1370 if y4>19 [fine]:end[gioco]
+1380 end
+1390 bgn[2sx alieno]
+1400 if x4>0 dx=-1
+1410 end
+1420 bgn[2dx alieno]
+1430 if x4<20 dx=1
+1440 end
+1450 bgn[2su]
+1460 if y4>3 dy=-1
+1470 end
+1480 bgn[colpito]
+1490 csr x1,y1
+1500 x1=int(rnd(1)*21)
+1510 y2=1
+1520 y1=y1-4
+1530 if y1<2 y1=2
+1540 end
+1550 bgn[2colpito]
+1560 csr x4,y4
+1570 x4=int(rnd(1)*21)
+1580 y2=1
+1590 y4=y4-4
+1600 if y4<2 y4=2
+1610 end

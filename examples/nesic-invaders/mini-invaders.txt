@@ -1,0 +1,228 @@
+100 bgn[mini invaders]
+110 [inizializza]
+120 [game loop]
+130 end
+140 '
+150 bgn[game loop]
+160 [game over]
+170 [gioco]
+180 again
+190 '
+200 bgn[gioco]
+210 [mov invaders]
+220 [movimento], ic+1
+230 again
+240 '
+250 bgn[movimento],i
+260 for m=1 to i
+270 [proiettile]
+280 [mov cann]
+290 [proiettile]
+300 [mov ufo]
+310 [proiettile]
+320 [mov cann]
+330 [proiettile]
+340 next
+350 end
+360 '
+370 bgn[mov cann]
+380 d=0
+390 on joy[sx];[dx]
+400 if d video(x,21)=$20,20:x=x+d
+410 video(x,21,7)=$57,58
+420 end
+430 '
+440 bgn[proiettile]
+450 if y2 video(x2,y2)=$20:y2=y2-1:else if fire y2=20:x2=x:effect 3,1,127,0
+460 if y2 csr x2,y2:if video=32 video(,,1)=$59:else[colpito]
+470 end
+480 '
+490 bgn[sx]:d=x>0:end
+500 '
+510 bgn[dx]:d=-(x<20):end
+520 '
+530 bgn[mov ufo]
+540 video$(hh)=b$
+550 color$(hh)=repeat$(chr$(3),22)
+560 if flag [mov disco]
+570 end
+580 '
+590 bgn[mov disco]
+600 if rnd(1)<.5 [sx ufo]:else[dx ufo]
+610 if rnd(1)<.3 [su ufo]:else[giu ufo]
+620 video(x1,y1)=$20,20
+630 x1=x1+dx
+640 y1=y1+dy
+650 video(x1,y1,5)=$55,56
+660 if y1>20 [invasione]:end[gioco]
+670 end
+680 '
+690 bgn[sx ufo]:dx=x1>0:end
+700 '
+710 bgn[dx ufo]:dx=-(x1<20):end
+720 '
+730 bgn[su ufo]:dy=y1>2:end
+740 '
+750 bgn[giu ufo]:dy=1:end
+760 '
+770 bgn[punti],i
+780 sc=sc+i
+790 csr 6,0:ink=7:print sc
+800 end
+810 '
+820 bgn[alien1]:poke shape(65),$18,7e,db,db,7e,3c,42,24:end
+830 '
+840 bgn[alien2]:poke shape(65),$18,7e,db,db,7e,24,58,81:end
+850 '
+860 bgn[mov invaders]
+870 mm=abs(mm-1)
+880 if mm [alien1]:else [alien2]
+890 if ix<1 or ix>42 ic=o:[inizio quadro],ih:again[gioco]
+900 a=20+mm*5
+910 effect 0,5,a
+920 effect 1,128,a,a+4
+930 if destra [mov dx]:else[mov sx]
+940 b$=mid$(a$,ix,22)
+950 video$(hh)=b$
+960 color$(hh)=repeat$(chr$(3),22)
+970 if hh>20 [invasione]:end[gioco]
+980 end
+990 '
+1000 bgn[mov dx]
+1010 csr 21,hh
+1020 if video=65 [inverti marcia]
+1030 ix=ix-1
+1040 end
+1050 '
+1060 bgn[mov sx]
+1070 csr 0,hh
+1080 if video=65 [inverti marcia]
+1090 ix=ix+1
+1100 end
+1110 '
+1120 bgn[inverti marcia]
+1130 video$(hh)=repeat$(" ",22)
+1140 destra=1-destra
+1150 hh=hh+1
+1160 again[mov invaders]
+1170 '
+1180 bgn[colpito]
+1190 effect 3,0
+1200 csr x2,y2
+1210 c=video
+1220 video(,,2)=$2a
+1230 effect 2,3,100,93
+1240 if c=65 [invader colpito]
+1250 for i=1 to 200:next
+1260 video(x2,y2)=$20
+1270 y2=0
+1280 if(c=85)or(c=86)[ufo colpito]
+1290 if ic end[movimento]
+1300 ih=ih-3*(ih<19)
+1310 [inizio quadro],ih
+1320 again[gioco]
+1330 '
+1340 bgn[ufo colpito]
+1350 [punti],y1*y1
+1360 flag=0
+1370 video(x1,y1)=$20,20
+1380 x1=int(rnd(1)*21)
+1390 y1=y1-4
+1400 if y1<2 y1=2
+1410 end
+1420 '
+1430 bgn[invader colpito]
+1440 [punti],hh
+1450 ic=ic-1
+1460 if ic=1 flag=1
+1470 a$=left$(a$,ix+x2-1)+chr$(32)+right$(a$,len(a$)-ix-x2)
+1480 end
+1490 '
+1500 bgn[invasione]
+1510 effect
+1520 effect 2,1,40,120
+1530 csr 0,11
+1540 ink=1:print "mi dispiace, sei stato"
+1550 csr 7,13
+1560 print "invaso!"
+1570 for i=1 to 3000:next
+1580 end
+1590 '
+1600 bgn[game over]
+1610 effect
+1620 effect 1,1,100,0
+1630 ink=2:csr:print "punti:";:ink=7:print sc
+1640 ink=7:csr 6,11:print "game over"
+1650 ink=1:csr 4,5:print "mini invaders"
+1660 ink=5:csr 3,19:print "premi 'fire' per"
+1670 csr 7,21:print "iniziare"
+1680 if fire repeat
+1690 if not fire repeat
+1700 ih=5
+1710 sc=0
+1720 flag=0
+1730 [inizio quadro],ih
+1740 end
+1750 '
+1760 bgn[inizio quadro],hh
+1770 y1=3
+1780 x1=int(rnd(1)*21)
+1790 ink=2:csr:print "punti:";:ink=7:print sc
+1800 a$=""
+1810 for i = 1 to 8:a$=a$+chr$(65)+chr$(32):next
+1820 a$=repeat$(chr$(32),21)+a$
+1830 ix=22
+1840 destra=1
+1850 ic=8
+1860 x=10:y2=0
+1870 video$(22)=repeat$(chr$(102),22)
+1880 color$(22)=repeat$(chr$(5),22)
+1890 end
+1900 '
+1910 bgn[inizializza]
+1920 border=0
+1930 paper=0
+1940 graphic 1:graphic 0:csr
+1950 poke shape($55),$00,01,02,1f,7f,ed,7f,3f
+1960 ,00,80,40,f8,fe,bb,fe,fc
+1970 ,01,01,03,1f,37,3f,1f,15
+1980 ,00,00,80,f0,d8,f8,f0,50
+1990 ,01,01,01,01,01,01,01,01
+2000 [font]
+2010 graphic 1,0
+2020 end
+2030 '
+2040 bgn[font]
+2050 poke shape(0),$3c,66,6e,6e,60,62,3c,00,18,3c,66,7e,66,66,66,00
+2060 ,7c,66,66,7c,66,66,7c,00,3c,66,60,60,60,66,3c,00
+2070 ,78,6c,66,66,66,6c,78,00,7e,60,60,78,60,60,7e,00
+2080 ,7e,60,60,78,60,60,60,00,3c,66,60,6e,66,66,3c,00
+2090 ,66,66,66,7e,66,66,66,00,3c,18,18,18,18,18,3c,00
+2100 ,1e,0c,0c,0c,0c,6c,38,00,66,6c,78,70,78,6c,66,00
+2110 ,60,60,60,60,60,60,7e,00,63,77,7f,6b,63,63,63,00
+2120 ,66,76,7e,7e,6e,66,66,00,3c,66,66,66,66,66,3c,00
+2130 ,7c,66,66,7c,60,60,60,00,3c,66,66,66,66,3c,0e,00
+2140 ,7c,66,66,7c,78,6c,66,00,3c,66,60,3c,06,66,3c,00
+2150 ,7e,18,18,18,18,18,18,00,66,66,66,66,66,66,3c,00
+2160 ,66,66,66,66,66,3c,18,00,63,63,63,6b,7f,77,63,00
+2170 ,66,66,3c,18,3c,66,66,00,66,66,66,3c,18,18,18,00
+2180 ,7e,06,0c,18,30,60,7e,00,3c,30,30,30,30,30,3c,00
+2190 ,0c,12,30,7c,30,62,fc,00,3c,0c,0c,0c,0c,0c,3c,00
+2200 ,00,18,3c,7e,18,18,18,18,00,10,30,7f,7f,30,10,00
+2210 ,00,00,00,00,00,00,00,00,18,18,18,18,00,00,18,00
+2220 ,66,66,66,00,00,00,00,00,66,66,ff,66,ff,66,66,00
+2230 ,18,3e,60,3c,06,7c,18,00,62,66,0c,18,30,66,46,00
+2240 ,3c,66,3c,38,67,66,3f,00,06,0c,18,00,00,00,00,00
+2250 ,0c,18,30,30,30,18,0c,00,30,18,0c,0c,0c,18,30,00
+2260 ,00,66,3c,ff,3c,66,00,00,00,18,18,7e,18,18,00,00
+2270 ,00,00,00,00,00,18,18,30,00,00,00,7e,00,00,00,00
+2280 ,00,00,00,00,00,18,18,00,00,03,06,0c,18,30,60,00
+2290 ,3c,66,6e,76,66,66,3c,00,18,18,38,18,18,18,7e,00
+2300 ,3c,66,06,0c,30,60,7e,00,3c,66,06,1c,06,66,3c,00
+2310 ,06,0e,1e,66,7f,06,06,00,7e,60,7c,06,06,66,3c,00
+2320 ,3c,66,60,7c,66,66,3c,00,7e,66,0c,18,18,18,18,00
+2330 ,3c,66,66,3c,66,66,3c,00,3c,66,66,3e,06,66,3c,00
+2340 ,00,00,18,00,00,18,00,00,00,00,18,00,00,18,18,30
+2350 ,0e,18,30,60,30,18,0e,00,00,00,7e,00,7e,00,00,00
+2360 ,70,18,0c,06,0c,18,70,00,3c,66,06,0c,18,00,18,00
+2370 end
